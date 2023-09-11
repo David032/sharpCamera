@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34018.315
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "sharpCamera", "sharpCamera\sharpCamera.csproj", "{ED19D02D-736C-4A9D-97A1-6BB92B358BCD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "sharpCameraExample", "sharpCameraExample\sharpCameraExample.csproj", "{0AAF24B4-22F4-4D59-9B75-D88F7854ED1D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{ED19D02D-736C-4A9D-97A1-6BB92B358BCD} = {ED19D02D-736C-4A9D-97A1-6BB92B358BCD}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{ED19D02D-736C-4A9D-97A1-6BB92B358BCD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED19D02D-736C-4A9D-97A1-6BB92B358BCD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED19D02D-736C-4A9D-97A1-6BB92B358BCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED19D02D-736C-4A9D-97A1-6BB92B358BCD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0AAF24B4-22F4-4D59-9B75-D88F7854ED1D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0AAF24B4-22F4-4D59-9B75-D88F7854ED1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0AAF24B4-22F4-4D59-9B75-D88F7854ED1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0AAF24B4-22F4-4D59-9B75-D88F7854ED1D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {327E0F7F-751F-414E-8CF7-BB3D359B1305}
+	EndGlobalSection
+EndGlobal
