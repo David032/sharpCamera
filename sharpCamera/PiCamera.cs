@@ -39,5 +39,17 @@ namespace sharpCamera
                 Console.WriteLine(e.Message);
             }
         }
+
+        public void RecordVideo()
+        {
+            try
+            {
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+        }
     }
 }
