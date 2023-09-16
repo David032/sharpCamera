@@ -5,6 +5,7 @@ namespace sharpCamera
     {
         private Process? cameraCommand;
         private string outputPath = "/output";
+        private TaskCompletionSource<bool> eventHandled;
 
         public PiCamera()
         {
@@ -15,6 +16,7 @@ namespace sharpCamera
             }
         }
 
+        #region Still Images
         public void TakePicture()
         {
             try
@@ -38,6 +40,41 @@ namespace sharpCamera
             }
         }
 
+        public async Task TakePictureAsync()
+        {
+            eventHandled = new TaskCompletionSource<bool>();
+            using (cameraCommand = new Process())
+            {
+                try
+                {
+                    string fileNameToOutput = "-o " + DateTime.Now.ToString("yyyyMMddHHmmss") + ".jpg";
+                    cameraCommand.StartInfo.UseShellExecute = false;
+                    cameraCommand.StartInfo.FileName = "raspistill";
+                    cameraCommand.StartInfo.Arguments = fileNameToOutput;
+                    cameraCommand.EnableRaisingEvents = true;
+                    cameraCommand.Exited += new EventHandler(ImageTaken);
+#if DEBUG
+                    Console.Out.WriteLine(cameraCommand.StartInfo.Arguments);
+#endif
+                    cameraCommand.Start();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    return;
+                }
+
+                await Task.WhenAny(eventHandled.Task, Task.Delay(30000));
+            }
+        }
+
+        private void ImageTaken(object sender, EventArgs e)
+        {
+            eventHandled.TrySetResult(true);
+        }
+        #endregion
+
+        #region Videos
         public void RecordVideo()
         {
             try
@@ -60,5 +97,40 @@ namespace sharpCamera
                 Console.WriteLine(e.Message);
             }
         }
+
+        public async Task RecordVideoAsync()
+        {
+            eventHandled = new TaskCompletionSource<bool>();
+            using (cameraCommand = new Process())
+            {
+                try
+                {
+                    string args = "-o " + DateTime.Now.ToString("yyyyMMddHHmmss") + ".h264 -t 30000";
+                    cameraCommand.StartInfo.UseShellExecute = false;
+                    cameraCommand.StartInfo.FileName = "raspivid";
+                    cameraCommand.StartInfo.Arguments = args;
+                    cameraCommand.EnableRaisingEvents = true;
+                    cameraCommand.Exited += new EventHandler(ImageTaken);
+#if DEBUG
+                    Console.Out.WriteLine(cameraCommand.StartInfo.Arguments);
+#endif
+                    cameraCommand.Start();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    return;
+                }
+
+                await Task.WhenAny(eventHandled.Task, Task.Delay(45000));
+            }
+        }
+
+        private void VideoRecorded(object sender, EventArgs e)
+        {
+            eventHandled.TrySetResult(true);
+        }
+        #endregion
+
     }
 }
