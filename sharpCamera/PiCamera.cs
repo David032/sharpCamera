@@ -3,7 +3,6 @@ namespace sharpCamera
 {
     public class PiCamera
     {
-        private TaskCompletionSource<bool>? imageTaken;
         private Process? cameraCommand;
         private string outputPath = "/output";
 
@@ -18,7 +17,6 @@ namespace sharpCamera
 
         public void TakePicture()
         {
-            imageTaken = new TaskCompletionSource<bool>();
             try
             {
                 using (cameraCommand = new Process())
@@ -27,6 +25,29 @@ namespace sharpCamera
                     cameraCommand.StartInfo.UseShellExecute = false;
                     cameraCommand.StartInfo.FileName = "raspistill";
                     cameraCommand.StartInfo.Arguments = fileNameToOutput;
+
+#if DEBUG
+                    Console.Out.WriteLine(cameraCommand.StartInfo.Arguments);
+#endif
+                    cameraCommand.Start();
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+        }
+
+        public void RecordVideo()
+        {
+            try
+            {
+                using (cameraCommand = new Process())
+                {
+                    string args = "-o " + DateTime.Now.ToString("yyyyMMddHHmmss") + ".h264 -t 30000";
+                    cameraCommand.StartInfo.UseShellExecute = false;
+                    cameraCommand.StartInfo.FileName = "raspivid";
+                    cameraCommand.StartInfo.Arguments = args;
 
 #if DEBUG
                     Console.Out.WriteLine(cameraCommand.StartInfo.Arguments);
