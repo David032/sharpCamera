@@ -4,16 +4,11 @@ namespace sharpCamera
     public class PiCamera
     {
         private Process? cameraCommand;
-        private string outputPath = "/output";
         private TaskCompletionSource<bool> eventHandled;
 
         public PiCamera()
         {
-            if (!Directory.Exists(outputPath))
-            {
-                // Can't set permissions for unix in .net 6 easily :(
-                // DirectoryInfo di = Directory.CreateDirectory(outputPath);
-            }
+
         }
 
         #region Still Images
@@ -23,7 +18,8 @@ namespace sharpCamera
             {
                 using (cameraCommand = new Process())
                 {
-                    string fileNameToOutput = "-o " + DateTime.Now.ToString("yyyyMMddHHmmss") + ".jpg";
+                    CameraSettings settings = new();
+                    string fileNameToOutput = "-o " + settings.OutputLocation + "/" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".jpg";
                     cameraCommand.StartInfo.UseShellExecute = false;
                     cameraCommand.StartInfo.FileName = "raspistill";
                     cameraCommand.StartInfo.Arguments = fileNameToOutput;
@@ -47,7 +43,8 @@ namespace sharpCamera
             {
                 try
                 {
-                    string fileNameToOutput = "-o " + DateTime.Now.ToString("yyyyMMddHHmmss") + ".jpg";
+                    CameraSettings settings = new();
+                    string fileNameToOutput = "-o " + settings.OutputLocation + "/" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".jpg";
                     cameraCommand.StartInfo.UseShellExecute = false;
                     cameraCommand.StartInfo.FileName = "raspistill";
                     cameraCommand.StartInfo.Arguments = fileNameToOutput;
@@ -81,7 +78,8 @@ namespace sharpCamera
             {
                 using (cameraCommand = new Process())
                 {
-                    string args = "-o " + DateTime.Now.ToString("yyyyMMddHHmmss") + ".h264 -t 30000";
+                    VideoCameraSettings settings = new();
+                    string args = "-o " + settings.OutputLocation + "/" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".h264 -t " + (settings.RecordingDuration * 1000);
                     cameraCommand.StartInfo.UseShellExecute = false;
                     cameraCommand.StartInfo.FileName = "raspivid";
                     cameraCommand.StartInfo.Arguments = args;
@@ -105,7 +103,8 @@ namespace sharpCamera
             {
                 try
                 {
-                    string args = "-o " + DateTime.Now.ToString("yyyyMMddHHmmss") + ".h264 -t 30000";
+                    VideoCameraSettings settings = new();
+                    string args = "-o " + settings.OutputLocation + "/" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".h264 -t " + (settings.RecordingDuration * 1000);
                     cameraCommand.StartInfo.UseShellExecute = false;
                     cameraCommand.StartInfo.FileName = "raspivid";
                     cameraCommand.StartInfo.Arguments = args;
